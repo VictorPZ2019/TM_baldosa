@@ -1,0 +1,25 @@
+#include <Arduino.h>
+
+#define R1 100000
+#define Vsal A0 
+#define B 3950
+#define T0 25
+#define R2nominal 100000
+
+float R2 = 0.0;
+float T;
+
+void setup() {
+  Serial.begin(115200);
+  analogReference(EXTERNAL);
+}
+
+void loop() {
+  R2 = ((float)analogRead(Vsal)*R1)/(1023-(float)analogRead(Vsal));
+  T = 1.0/(1.0/(T0+273.15)+(1.0/(B))*log(R2/R2nominal));
+  T -= 273.15;
+  Serial.print("Temperature: ");
+  Serial.print(T);
+  Serial.print(" *C \n");
+  delay(1000);
+}
